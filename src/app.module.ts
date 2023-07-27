@@ -5,6 +5,10 @@ import { Task } from './tasks/task.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { ExerciseModule } from './exercise/exercise.module';
+import { User } from './auth/user.entity';
+import { Exercise } from './exercise/exercise.entity';
+import { ExerciseRepository } from './exercise/exercise.repository';
 
 @Module({
   imports: [
@@ -13,6 +17,7 @@ import { configValidationSchema } from './config.schema';
       validationSchema: configValidationSchema,
     }),
     TasksModule,
+    ExerciseModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,7 +29,7 @@ import { configValidationSchema } from './config.schema';
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
           type: 'postgres',
-          entities: [Task],
+          entities: [Task, User, Exercise],
           autoLoadEntities: true,
           synchronize: true,
         };
